@@ -1,15 +1,18 @@
 import './globals.css'
 import { Nunito_Sans, Nunito } from 'next/font/google'
 import { createClient } from '@/prismicio'
-import { Metadata, ResolvingMetadata } from 'next'
+// import { Metadata, ResolvingMetadata } from 'next'
+import Navbar from './components/Navbar'
+import Footer from './components/Footer'
 
- 
+
+
 const nunito = Nunito({
   subsets: ['latin'],
   display: 'swap',
   variable: '--font-nunito',
 })
- 
+
 const nunitoSans = Nunito_Sans({
   subsets: ['latin'],
   display: 'swap',
@@ -23,17 +26,17 @@ const nunitoSans = Nunito_Sans({
 
 
 export async function generateMetadata({ params, searchParams }, parent) {
-    const client = createClient();
+  const client = createClient();
 
-    const page = await client.getSingle("setting");
+  const settings = await client.getSingle("setting");
 
 
 
   return {
-    title: page.data.site_title || "Anurag",
-    description:page.data.meta_description || "Anurag Kamboj website metadescription",
+    title: settings.data.site_title || "Anurag",
+    description: settings.data.meta_description || "Anurag Kamboj website metadescription",
     openGraph: {
-      images: [page.data.og_image.url || ""],
+      images: [settings.data.og_image.url || ""],
     },
   }
 }
@@ -46,9 +49,11 @@ export async function generateMetadata({ params, searchParams }, parent) {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${nunito.variable} ${nunitoSans.variable}`}>
-      <header> Header </header>
-      <body>{children}</body>
-      <footer>Footer</footer>
+      <body>
+        <Navbar />
+        {children}
+        <Footer />
+      </body>
     </html>
 
   )
